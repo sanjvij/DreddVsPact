@@ -1,0 +1,22 @@
+Dredd HTTP API Testing Framework
+
+- Leightweight (Docker and npm packages available)
+- Language agnostic
+- Validates API implementation as per given API specification (OpenApi 2, OpenApi 3 (Experimental), API Blueprint)
+- Support executing multiple contracts
+- Support before,beforeEach,after, afterEach Hooks
+
+more Infomration on https://dredd.org/en/latest/how-to-guides.html#sending-multipart-requests
+
+Disadvantages
+- Manual handshake of contracts not available
+- OpenApi 3 in Experimental Stage (Although we were able to perform most of the operations)
+- Consumer contracts have to be manually written including identification of all possible states of resource used by each consumer. In Micro Service Architecture this could mean generating a high number of consumer driven contracts
+
+
+
+
+
+
+
+
