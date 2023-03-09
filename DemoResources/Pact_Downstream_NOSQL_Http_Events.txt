@@ -1,0 +1,48 @@
+public class UserServiceConsumerTest {
+
+    private static final String PROVIDER = "user_service_provider";
+    private static final String CONSUMER = "user_service_consumer";
+    private static final String API_PATH = "/users";
+    private static final String DATABASE_NAME = "test";
+    private static final String COLLECTION_NAME = "users";
+    
+    @Rule
+    public PactProviderRuleMk2 provider = new PactProviderRuleMk2(PROVIDER, "localhost", 8080, this);
+    
+    @Pact(consumer = CONSUMER, provider = PROVIDER)
+    public PactFragment createFragment(PactDslWithProvider builder) {
+        // Set up expected interaction with API
+        return builder.given("There are users")
+                .uponReceiving("A request for user data")
+                .path(API_PATH)
+                .method("GET")
+                .willRespondWith()
+                .status(200)
+                .body("[{\"name\": \"John Doe\"}]")
+                .toFragment();
+    }
+    
+    @Test
+    @PactTestFor(fragment = "createFragment")
+    public void testApiInteraction(MockServer mockServer) throws Exception {
+        // Set up mock database
+        MongoClient mongoClient = new MongoClient(new ServerAddress("localhost", 12345));
+        MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
+        MongoCollection<Document> collection = database.getCollection(COLLECTION_NAME);
+        collection.insertOne(new Document("name", "John Doe"));
+        
+        // Set up HTTP client
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        HttpGet request = new HttpGet(mockServer.getUrl() + API_PATH);
+        
+        // Test interaction with API
+        HttpResponse response = httpClient.execute(request);
+        String responseBody = EntityUtils.toString(response.getEntity());
+        assertEquals(200, response.getStatusLine().getStatusCode());
+        assertEquals("[{\"name\": \"John Doe\"}]", responseBody);
+        
+        // Verify interaction with database
+        Document result = collection.find(eq("name", "John Doe")).first();
+        assertEquals("John Doe", result.get("name"));
+    }
+}
