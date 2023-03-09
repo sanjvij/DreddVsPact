@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Book Mapper Unit Tests" tests="2" skipped="0" failures="0" errors="0" timestamp="2023-02-09T22:40:18" hostname="Sanjs-Air.broadband" time="0.006">
+  <properties/>
+  <testcase name="when convert Book dto to Book entity, then correct" classname="example.dto.BookDtoTest" time="0.004"/>
+  <testcase name="when convert Book entity to Book dto, then correct" classname="example.dto.BookDtoTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
