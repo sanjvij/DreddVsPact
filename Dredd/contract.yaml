@@ -1,0 +1,241 @@
+openapi: 3.0.1
+x-stoplight:
+  id: qufgg8zcjjdpv
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: "http://localhost:8080"
+    description: Generated server url
+paths:
+  /api/v1/books:
+    get:
+      tags:
+        - book-resource
+      summary: Gets the list of available books
+      operationId: list
+      responses:
+        "200":
+          description: Found the books
+          content:
+            application/json:
+              schema:
+                type: string
+    post:
+      tags:
+        - book-resource
+      summary: Creates a new book
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookDto"
+            examples:
+              Example 1:
+                value:
+                  id: 9
+                  title: My Book Sample
+                  description: Sample Book
+                  genre: Old
+                  price: 10
+                  author:
+                    id: 3
+                    firstName: string
+                    lastName: string
+                    email: john.doe@acme.io
+              Example 2:
+                value:
+                  id: 0
+                  title:
+                  description:
+                  genre: Old
+                  price: 10
+                  author:
+                    id: 100
+                    firstName: string
+                    lastName: string
+                    email: john.doe@acme.io
+        required: true
+      responses:
+        "201":
+          description: Created the book
+        "422":
+          description: Bad request
+  "/api/v1/books/{id}":
+    get:
+      tags:
+        - book-resource
+      summary: Get a book by its id
+      operationId: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 3
+      responses:
+        "200":
+          description: Found the book
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookDto"
+              examples: {}
+  "/api/v1/books/{id1}":
+    get:
+      tags:
+        - book-resource
+      summary: Get a book by its id
+      operationId: get
+      parameters:
+        - name: id1
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: a
+      responses:
+        "400":
+          description: Invalid id supplied
+  "/api/v1/books/{id2}":
+    get:
+      tags:
+        - book-resource
+      summary: Get a book by its id
+      operationId: get
+      parameters:
+        - name: id2
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 9999
+      responses:
+        "404":
+          description: Book not found
+  /api/v1/authors:
+    post:
+      tags:
+        - author-resource
+      summary: Creates a new author
+      operationId: create_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthorDto"
+            examples:
+              Example 1:
+                value:
+                  id: 4
+                  firstName: Sanj
+                  lastName: Vij
+                  email: sanjvij@gmail.com
+              Example 2:
+                value:
+                  id:
+                  firstName:
+                  lastName:
+                  email:
+        required: true
+      responses:
+        "201":
+          description: Created the author
+        "422":
+          description: Bad request
+  "/api/v1/authors/{id}":
+    delete:
+      tags:
+        - author-resource
+      summary: Removes a requested author
+      operationId: delete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 3
+      responses:
+        "204":
+          description: No Content
+  "/api/v1/authors/{id1}":
+    delete:
+      tags:
+        - author-resource
+      summary: Removes a requested author
+      operationId: delete
+      parameters:
+        - name: id1
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: a
+      responses:
+        "400":
+          description: Bad request
+  "/api/v1/authors/{id2}":
+    delete:
+      tags:
+        - author-resource
+      summary: Removes a requested author
+      operationId: delete
+      parameters:
+        - name: id2
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 9
+      responses:
+        "404":
+          description: Not Found
+components:
+  schemas:
+    AuthorDto:
+      required:
+        - email
+        - firstName
+        - lastName
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        firstName:
+          pattern: "^[A-Za-z0-9]+$"
+          type: string
+        lastName:
+          pattern: "^[A-Za-z0-9]+$"
+          type: string
+        email:
+          type: string
+    BookDto:
+      required:
+        - author
+        - genre
+        - title
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        description:
+          type: string
+        genre:
+          type: string
+        price:
+          type: number
+        author:
+          $ref: "#/components/schemas/AuthorDto"
